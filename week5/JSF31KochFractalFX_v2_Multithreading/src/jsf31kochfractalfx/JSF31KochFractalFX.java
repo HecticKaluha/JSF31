@@ -221,7 +221,10 @@ public class JSF31KochFractalFX extends Application {
         Platform.runLater(new Runnable(){
             @Override
             public void run() {
-                kochManager.drawEdges();
+                synchronized(stefan)
+                {
+                    kochManager.drawEdges();
+                }
             }
         });
     }
@@ -270,7 +273,11 @@ public class JSF31KochFractalFX extends Application {
         zoomTranslateY = zoomTranslateY + event.getY() - lastDragY;
         lastDragX = event.getX();
         lastDragY = event.getY();
-        kochManager.drawEdges();
+        
+        synchronized(stefan)
+        {
+            requestDrawEdges();
+        }
     }
 
     private void kochPanelMousePressed(MouseEvent event) {

@@ -40,7 +40,7 @@ public class KochManager
         this.stefan = stefan;
     }
     
-    public  void addEdges(Edge edge) 
+    public void addEdges(Edge edge) 
     {
         synchronized(stefan)
         {
