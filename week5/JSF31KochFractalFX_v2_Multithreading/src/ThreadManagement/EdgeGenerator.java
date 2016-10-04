@@ -19,14 +19,17 @@ public class EdgeGenerator implements Runnable, Observer
 {
     private KochManager kochManager;
     private KochFractal kochFractal;
+    private Object stefan;
     private int side;
     
-    public EdgeGenerator(int side, KochManager kochManager, KochFractal kochFractal)
+    public EdgeGenerator(int side, KochManager kochManager, /*int level*/ KochFractal kochFractal, Object stefan)
     {
         this.side = side;
         this.kochManager = kochManager;
-        this.kochFractal = kochFractal;
+        this.kochFractal = new KochFractal();//kochFractal;
+        this.kochFractal.setLevel(kochFractal.getLevel());
         this.kochFractal.addObserver(this);
+        this.stefan = stefan;
     }
         
     @Override
@@ -48,14 +51,18 @@ public class EdgeGenerator implements Runnable, Observer
     }
 
     @Override
-    public synchronized void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) {
        Edge e = (Edge) arg;
-       kochManager.addEdges(e);
-        
-        if(kochManager.getEdges().size() == kochFractal.getNrOfEdges())
-        {
-            kochManager.drawEdges();
-        }
+       synchronized(stefan)
+       {      
+           kochManager.addEdges(e);
+           if(kochManager.getEdges().size() == kochFractal.getNrOfEdges())
+           {
+                kochManager.getApplication().requestDrawEdges();
+                kochManager.setDone();
+                //kochManager.drawEdges();
+           }
+       }
     }
 
     

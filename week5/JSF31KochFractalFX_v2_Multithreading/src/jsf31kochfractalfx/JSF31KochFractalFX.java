@@ -34,6 +34,7 @@ public class JSF31KochFractalFX extends Application {
     private double startPressedY = 0.0;
     private double lastDragX = 0.0;
     private double lastDragY = 0.0;
+    private static Object stefan;
 
     // Koch manager
     // TO DO: Create class KochManager in package calculate
@@ -157,7 +158,7 @@ public class JSF31KochFractalFX extends Application {
         
         // Create Koch manager and set initial level
         resetZoom();
-        kochManager = new KochManager(this);
+        kochManager = new KochManager(this, stefan);
         kochManager.changeLevel(currentLevel);
         
         // Create the scene and add the grid pane
@@ -212,6 +213,7 @@ public class JSF31KochFractalFX extends Application {
     }
     
     public void setTextDraw(String text) {
+        
         labelDrawText.setText(text);
     }
     
@@ -303,6 +305,7 @@ public class JSF31KochFractalFX extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        stefan = new Object();
         launch(args);
     }
 }

@@ -134,7 +134,7 @@ public class TimeStamp {
 
         @Override
         public String toString() {
-            return "From '" + this.beginS + "' till '" + this.endS + "' is " + (this.end - this.begin) + " mSec.";
+            return (this.end - this.begin) + " mSec.";
         }
     }
 
