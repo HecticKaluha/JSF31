@@ -24,6 +24,7 @@ public class MovingBallsFX extends Application {
     
     private Thread threadDraw;
     private Ball[] ballArray = new Ball[10];
+    private RW monitor = new RW();
     private Thread[] threadArray = new Thread[10];
     private CheckBox[] checkBoxArray = new CheckBox[10];
     private Circle[] circleArray = new Circle[10];
@@ -107,17 +108,17 @@ public class MovingBallsFX extends Application {
         int y = (int) cb.getLayoutY() + radius;
         if (cb.isSelected() && index < 5) { 
             // Reader selected: new red ball
-            Ball b = new Ball(minX, maxX, minCsX, maxCsX, y, Color.RED);
+            Ball b = new Ball(minX, maxX, minCsX, maxCsX, y, BallType.READER);
             ballArray[index] = b;
-            Thread t = new Thread(new BallRunnable(b));
+            Thread t = new Thread(new BallRunnable(b, monitor));
             threadArray[index] = t;
             circleArray[index].setVisible(true);
             t.start();
         } else if (cb.isSelected() && index >= 5) { 
             // Writer selected: new blue ball
-            Ball b = new Ball(minX, maxX, minCsX, maxCsX, y, Color.BLUE);
+            Ball b = new Ball(minX, maxX, minCsX, maxCsX, y, BallType.WRITER);
             ballArray[index] = b;
-            Thread t = new Thread(new BallRunnable(b));
+            Thread t = new Thread(new BallRunnable(b, monitor));
             threadArray[index] = t;
             circleArray[index].setVisible(true);
             t.start();

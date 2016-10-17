@@ -7,11 +7,12 @@ public class Ball {
 
     private int xPos, yPos, speed;
     private int minX, maxX;
+    private BallType ballType;
     private Color color;
     private int minCsX;
     private int maxCsX;
 
-    public Ball(int minX, int maxX, int minCsX, int maxCsX, int yPos, Color color) {
+    public Ball(int minX, int maxX, int minCsX, int maxCsX, int yPos, BallType ballType) {
         this.xPos = minX;
         this.yPos = yPos;
         this.minX = minX;
@@ -19,9 +20,35 @@ public class Ball {
         this.minCsX = minCsX;
         this.maxCsX = maxCsX;
         this.speed = 10 + (new Random()).nextInt(5);
-        this.color = color;
+        this.ballType = ballType;
+        
+        if(ballType != null)
+        {
+            switch(ballType)
+            {
+                case READER:
+                    color = Color.RED;
+                    break;
+                case WRITER:
+                    color = Color.BLUE;
+                    break;
+                default:
+                    color = Color.WHITE;
+                    break;
+            }            
+        }
     }
 
+    public BallType getBallType()
+    {
+        return ballType;
+    }
+
+    public void setBallType(BallType ballType)
+    {
+        this.ballType = ballType;
+    }
+    
     public void move() {
         xPos++;
         if (xPos > maxX) {
