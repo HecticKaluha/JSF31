@@ -16,8 +16,9 @@ import java.util.concurrent.locks.ReentrantLock;
 public class RW {
     
     private int readersActive;
-    private int writersActive;    
-    private int readersWaiting;
+    private int writersActive;  
+    //private int readersWaiting;
+    private int writersWaiting;
     private final Lock lock = new ReentrantLock();
     private final Condition okToRead  = lock.newCondition();
     private final Condition okToWrite  = lock.newCondition();
@@ -34,9 +35,9 @@ public class RW {
         {    
             while(writersActive != 0) 
             {
-                readersWaiting++;
+                //readersWaiting++;
                 okToRead.await();
-                readersWaiting--;
+                //readersWaiting--;
             }
             readersActive++;
         }  
@@ -52,9 +53,13 @@ public class RW {
         try
         {
             readersActive--;
-            if(readersActive == 0)
+            if(writersWaiting > 0)
             {
                 okToWrite.signal();
+            }
+            else if(writersWaiting == 0)
+            {
+                okToRead.signalAll();
             }
         }
         finally
@@ -70,7 +75,9 @@ public class RW {
         {
             while (writersActive > 0 || readersActive > 0)
             {
+                writersWaiting++;
                 okToWrite.await();
+                writersWaiting--;
             }
             writersActive++;
         }
@@ -86,17 +93,15 @@ public class RW {
         lock.lock();
         try
         {
-            //okToWrite.signal();
             writersActive--;
-            
-            if(readersWaiting > 0)
-            {
-                okToRead.signalAll();
-            }
-            else
-            {
-                okToWrite.signal();
-            }
+                if(writersWaiting > 0)
+                {
+                    okToWrite.signal();
+                }
+                else if(writersWaiting == 0)
+                {
+                    okToRead.signalAll();
+                }
         }
         finally
         {
