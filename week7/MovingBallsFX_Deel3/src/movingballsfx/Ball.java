@@ -7,10 +7,12 @@ public class Ball {
 
     private int xPos, yPos, speed;
     private int minX, maxX;
-    private BallType ballType;
     private Color color;
     private int minCsX;
     private int maxCsX;
+    
+    private BallType ballType;
+    private boolean isInside;
 
     public Ball(int minX, int maxX, int minCsX, int maxCsX, int yPos, BallType ballType) {
         this.xPos = minX;
@@ -20,7 +22,9 @@ public class Ball {
         this.minCsX = minCsX;
         this.maxCsX = maxCsX;
         this.speed = 10 + (new Random()).nextInt(5);
+        
         this.ballType = ballType;
+        isInside = false;
         
         if(ballType != null)
         {
@@ -47,6 +51,16 @@ public class Ball {
     public void setBallType(BallType ballType)
     {
         this.ballType = ballType;
+    }
+
+    public boolean isIsInside()
+    {
+        return isInside;
+    }
+
+    public void setIsInside(boolean isInside)
+    {
+        this.isInside = isInside;
     }
     
     public void move() {

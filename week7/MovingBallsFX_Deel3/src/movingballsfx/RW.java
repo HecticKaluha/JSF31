@@ -13,8 +13,8 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @author Systeembeheer
  */
-public class RW {
-    
+public class RW
+{    
     private int readersActive;
     private int writersActive;  
     //private int readersWaiting;
@@ -23,10 +23,7 @@ public class RW {
     private final Condition okToRead  = lock.newCondition();
     private final Condition okToWrite  = lock.newCondition();
 
-    
-    public RW(){
-        
-    }
+    public RW(){}
     
     public void enterReader() throws InterruptedException
     {
@@ -85,7 +82,6 @@ public class RW {
             {
                 lock.unlock();
             }
-        
     }
 
     public void exitWriter() 

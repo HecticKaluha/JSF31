@@ -20,36 +20,58 @@ public class BallRunnable implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
+        while (!Thread.currentThread().isInterrupted())
+        {
             try {
                 ball.move();
                 if(ball.isEnteringCs())
                 {
-                    if(ball.getBallType() == BallType.READER)
-                    {
-                        monitor.enterReader();   
-                    }
-                    else if(ball.getBallType() == BallType.WRITER)
-                    {
-                        monitor.enterWriter();
-                    }
+                    enter();
                 }
                 else if(ball.isLeavingCs())
                 {
-                    if(ball.getBallType() == BallType.READER)
-                    {
-                        monitor.exitReader();   
-                    }
-                    else if(ball.getBallType() == BallType.WRITER)
-                    {
-                        monitor.exitWriter();
-                    }
-
+                    exit();
                 }
                 Thread.sleep(ball.getSpeed());
                 
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
+            }
+        }
+        
+        exit();
+    }
+    
+    public void exit()
+    {
+        if(ball.isIsInside())
+        {
+            if(ball.getBallType() == BallType.READER)
+            {
+                monitor.exitReader();
+                ball.setIsInside(false);
+            }
+            else if(ball.getBallType() == BallType.WRITER)
+            {
+                monitor.exitWriter();
+                ball.setIsInside(false);
+            }            
+        }
+    }
+    
+    public void enter() throws InterruptedException
+    {
+        if(!ball.isIsInside())
+        {
+            if(ball.getBallType() == BallType.READER)
+            {
+                monitor.enterReader();
+                ball.setIsInside(true);
+            }
+            else if(ball.getBallType() == BallType.WRITER)
+            {
+                monitor.enterWriter();
+                ball.setIsInside(true);
             }
         }
     }
